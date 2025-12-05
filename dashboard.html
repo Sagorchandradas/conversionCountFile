@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPAGrip Conversion Dashboard</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f4f6f8;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+    }
+
+    h1 {
+        text-align: center;
+        color: #1f2937;
+        margin-bottom: 20px;
+    }
+
+    .table-container {
+        max-width: 1200px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        overflow-x: auto;
+        padding: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+    }
+
+    th, td {
+        padding: 14px 18px;
+        text-align: center;
+    }
+
+    th {
+        background: #2563eb;
+        color: #fff;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    tr:nth-child(even) {
+        background: #f9fafb;
+    }
+
+    tr:hover {
+        background: #e0f2fe;
+        transition: 0.2s;
+    }
+
+    @media (max-width: 768px) {
+        th, td {
+            padding: 12px 10px;
+            font-size: 14px;
+        }
+    }
+
+    .footer {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 14px;
+        color: #666;
+    }
+
+</style>
+</head>
+<body>
+
+<h1>𝒜𝒹𝓈𝓌𝑜𝓇𝓁𝒹𝑀𝑒𝒹𝒾𝒶 Conversion Dashboard</h1>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Offer ID</th>
+                <th>Tracking ID</th>
+                <th>Payout ($)</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody id="data"></tbody>
+    </table>
+</div>
+
+<div class="footer">
+    &copy; 2025 𝒜𝒹𝓈𝓌𝑜𝓇𝓁𝒹𝑀𝑒𝒹𝒾𝒶. All rights reserved.
+</div>
+
+<script>
+async function loadData(){
+    try {
+        const res = await fetch("/.netlify/functions/list");
+        const json = await res.json();
+        let html = "";
+        json.reverse().forEach(row=>{
+            html += `<tr>
+                        <td>${row.offer_id}</td>
+                        <td>${row.tracking_id}</td>
+                        <td>$${row.payout}</td>
+                        <td>${row.time}</td>
+                    </tr>`;
+        });
+        document.getElementById("data").innerHTML = html;
+    } catch (err) {
+        document.getElementById("data").innerHTML = `<tr><td colspan="4">Failed to load data</td></tr>`;
+    }
+}
+
+loadData();
+</script>
+
+</body>
+</html>
